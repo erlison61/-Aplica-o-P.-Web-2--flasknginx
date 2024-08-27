@@ -1,0 +1,24 @@
+services:
+
+  pgsql:
+    image: postgres:15.4
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: ${PASSWORD_DB} 
+      POSTGRES_USER: ${USER_DB} 
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - teste-vol:/var/lib/postgresql/data
+    ports:
+      - 5433:5432
+
+  python:
+    build: 
+      context: .
+      dockerfile: ./dockerfiles/python.Dockerfile
+    depends_on:
+      - pgsql
+    ports:
+      - 5000:5000
+    volumes:
+      - .:/app
